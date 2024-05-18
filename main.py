@@ -92,10 +92,8 @@ logger = logging.getLogger()
 #     getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
 #     thumb = "thumb.jpg"
 
-@bot.on_message(filters.command(["cw3"]))
+@bot.on_message(filters.command(["lakshay"]))
 async def account_login(bot: Client, m: Message):
-    global cancel
-    cancel = False
 
     url = "https://elearn.crwilladmin.com/api/v5/login-other"
     data = {
