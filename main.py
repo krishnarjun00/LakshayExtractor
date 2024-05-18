@@ -10,9 +10,7 @@ import time
 import urllib
 import urllib.parse
 import uuid
-
 import aiohttp
-import cloudscraper
 import requests
 import tgcrypto
 from Crypto.Cipher import AES
