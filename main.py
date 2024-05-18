@@ -45,7 +45,7 @@ logging = logging.getLogger()
 # =========== Client ===========#
 bot = Client(
     "bot",
-    bot_token=bot_token,
+    bot_token= "6877077737:AAE79BKV7PR_EF4BaiyN0-xKPzT-J7Erx-Q",
     api_id=api_id,
     api_hash=api_hash,
 )
