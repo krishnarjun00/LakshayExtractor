@@ -28,31 +28,6 @@ from online.Config import *
 from online.helpers.button import keyboard
 from online.helpers.sudoers import *
 from online.helpers.text import *
-
-# ==========Logging==========#
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s [%(filename)s:%(lineno)d]",
-    datefmt="%d-%b-%y %H:%M:%S",
-    handlers=[
-        RotatingFileHandler("Assist.txt", maxBytes=50000000, backupCount=10),
-        logging.StreamHandler(),
-    ],
-)
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-logging = logging.getLogger()
-
-# =========== Client ===========#
-bot = Client(
-    "bot",
-    bot_token= "6877077737:AAE79BKV7PR_EF4BaiyN0-xKPzT-J7Erx-Q",
-    api_id=api_id,
-    api_hash=api_hash,
-)
-
-print(listen.__file__)
-
-
 import requests
 import json
 import subprocess
@@ -76,21 +51,28 @@ import re
 import cloudscraper
 from bs4 import BeautifulSoup
 
-load_dotenv()
-os.makedirs("./downloads", exist_ok=True)
+# ==========Logging==========#
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(message)s [%(filename)s:%(lineno)d]",
+    datefmt="%d-%b-%y %H:%M:%S",
+    handlers=[
+        RotatingFileHandler("Assist.txt", maxBytes=50000000, backupCount=10),
+        logging.StreamHandler(),
+    ],
+)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
+logging = logging.getLogger()
 
+# =========== Client ===========#
 bot = Client(
-    "CW",
-    bot_token= "7072987239:AAEvz8gbVhGoOAyPedD-dzhtTCkkGoxayqA",
-    api_id= 20299588,
-    api_hash= "f550d6179131c293d658f15f8c24f594"
+    "bot",
+    bot_token= "6877077737:AAE79BKV7PR_EF4BaiyN0-xKPzT-J7Erx-Q",
+    api_id=api_id,
+    api_hash=api_hash,
 )
 
-logger = logging.getLogger()
-# thumb = os.environ.get("THUMB")
-# if thumb.startswith("http://") or thumb.startswith("https://"):
-#     getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
-#     thumb = "thumb.jpg"
+print(listen.__file__)
 
 @bot.on_message(filters.command(["lakshay"]))
 async def account_login(bot: Client, m: Message):
