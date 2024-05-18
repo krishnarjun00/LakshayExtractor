@@ -1,14 +1,38 @@
+import urllib
+import urllib.parse
 import requests
+import base64
 import json
+import subprocess
+from pyrogram.types.messages_and_media import message
+import helper
+from pyromod import listen
+from pyrogram.types import Message
+import tgcrypto
+import pyrogram
+from pyrogram import Client, filters
+from pyrogram.types.messages_and_media import message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import FloodWait
 import time
-import uuid
-from base64 import b64decode
+from pyrogram import Client as bot
+from pyrogram.types import User, Message
+from p_bar import progress_bar
+from subprocess import getstatusoutput
+import logging
+import os
+import sys
+import re
+import cloudscraper
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
+from base64 import b64encode, b64decode
+import aiohttp
+import time
+import uuid
 from pyrogram import Client, filters
-from pyrogram.types import Message
-import logging
-from logging.handlers import RotatingFileHandler
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+
 
 # ========== Logging ==========#
 logging.basicConfig(
@@ -50,11 +74,12 @@ HDR = {
 }
 
 @bot.on_message(filters.command(["lakshay"]))
-async def account_login(bot: Client, m: Message):
-    editable = await m.reply_text("Send **ID & Password** in this manner otherwise bot will not respond.\n\nSend like this:-  **ID*Password**")
-    
+async def account_login(client: Client, message: Message):
+    editable = await message.reply_text("Send **ID & Password** in this manner otherwise bot will not respond.\n\nSend like this:-  **ID*Password**")
+
     try:
-        input1 = await bot.listen(editable.chat.id)
+        # Wait for user input
+        input1 = await client.listen(editable.chat.id)
         raw_text = input1.text.strip()
         await input1.delete()
 
@@ -81,16 +106,16 @@ async def account_login(bot: Client, m: Message):
         res1.raise_for_status()
         b_data = res1.json()['data']
 
-        cool = "\n".join([f"`{data['id']}` - **{data['course_name']}**" for data in b_data])
-        await editable.edit(f'**You have these batches :-**\n\n**BATCH-ID -      BATCH NAME**\n\n{cool}')
+        courses = "\n".join([f"`{data['id']}` - **{data['course_name']}**" for data in b_data])
+        await editable.edit(f'**You have these batches :-**\n\n**BATCH-ID -      BATCH NAME**\n\n{courses}')
 
-        editable1 = await m.reply_text("**Now send the Batch ID to Download**")
-        input2 = await bot.listen(editable.chat.id)
+        editable1 = await message.reply_text("**Now send the Batch ID to Download**")
+        input2 = await client.listen(editable1.chat.id)
         batch_id = input2.text.strip()
         await editable1.delete()
         await input2.delete()
 
-        editable2 = await m.reply_text("📥**Please wait keep patience.** 🧲 `Scraping URL.`")
+        editable2 = await message.reply_text("📥**Please wait, keep patience.** 🧲 `Scraping URL.`")
         time.sleep(2)
 
         # Fetch subjects and topics
@@ -99,7 +124,7 @@ async def account_login(bot: Client, m: Message):
         subject_data = res2.json()["data"]
         subject_ids = [subject["subjectid"] for subject in subject_data]
 
-        await editable2.edit("📥**Please wait keep patience.** 🧲 `Scraping URL..`")
+        await editable2.edit("📥**Please wait, keep patience.** 🧲 `Scraping URL..`")
         time.sleep(2)
 
         all_topic_ids = []
@@ -118,7 +143,7 @@ async def account_login(bot: Client, m: Message):
         }
 
         cool2 = ""
-        await editable2.edit("📥**Please wait keep patience.** 🧲 `Scraping URL...`")
+        await editable2.edit("📥**Please wait, keep patience.** 🧲 `Scraping URL...`")
         for t in all_topic_ids:
             res4 = requests.get(f"https://rozgarapinew.teachx.in/get/livecourseclassbycoursesubtopconceptapiv3?topicid={t}&start=-1&conceptid=1&courseid={batch_id}&subjectid={subject_id}", headers=hdr11)
             res4.raise_for_status()
@@ -141,9 +166,10 @@ async def account_login(bot: Client, m: Message):
         with open(f'{file_name}.txt', 'w') as f:
             f.write(cool2)
 
-        await m.reply_document(f"{file_name}.txt")
+        await message.reply_document(f"{file_name}.txt")
     except Exception as e:
         logger.error(f"An error occurred: {str(e)}")
         await editable.edit(f"An error occurred: {str(e)}")
 
 bot.run()
+
