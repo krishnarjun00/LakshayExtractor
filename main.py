@@ -7,8 +7,10 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from pyrogram import Client, filters
 from pyrogram.types import Message
+import logging
+from logging.handlers import RotatingFileHandler
 
-# ==========Logging==========#
+# ========== Logging ==========#
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s [%(filename)s:%(lineno)d]",
@@ -18,19 +20,21 @@ logging.basicConfig(
         logging.StreamHandler(),
     ],
 )
+logger = logging.getLogger()
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
-logging = logging.getLogger()
+
+# =========== Configuration ===========#
+api_id = 20299588  # Replace with your actual API ID
+api_hash = 'f550d6179131c293d658f15f8c24f594'  # Replace with your actual API Hash
+bot_token = '6877077737:AAE79BKV7PR_EF4BaiyN0-xKPzT-J7Erx-Q'  # Replace with your actual Bot Token
 
 # =========== Client ===========#
 bot = Client(
     "bot",
-    bot_token= "6877077737:AAE79BKV7PR_EF4BaiyN0-xKPzT-J7Erx-Q",
+    bot_token=bot_token,
     api_id=api_id,
     api_hash=api_hash,
 )
-
-print(listen.__file__)
-
 
 RWA_URL = "https://rozgarapinew.teachx.in/post/login"
 HDR = {
@@ -139,6 +143,7 @@ async def account_login(bot: Client, m: Message):
 
         await m.reply_document(f"{file_name}.txt")
     except Exception as e:
+        logger.error(f"An error occurred: {str(e)}")
         await editable.edit(f"An error occurred: {str(e)}")
 
 bot.run()
