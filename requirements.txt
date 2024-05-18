@@ -21,3 +21,17 @@ aiofiles
 pytz
 umongo==3.1.0
 speedtest-cli
+pyrogram
+tgcrypto
+requests
+pyromod
+ffmpeg
+mediainfo
+cloudscraper
+beautifulsoup4
+bs4
+yt-dlp
+pycryptodome
+psutil
+helper
+python-dotenv
