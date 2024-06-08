@@ -321,13 +321,13 @@ async def account_login(bot: Client, m: Message):
         "user-agent": "okhttp/5.0.0-alpha",
         'Connection': 'Keep-Alive'
     }
-    
-    proxy_host = '104.26.3.116'
-    
-    proxies = {
-        'https': f"http://{proxy_host}",
-        'http': f"http://{proxy_host}"
-    }
+
+    # Remove proxy configuration for testing
+    # proxy_host = '104.26.3.116'
+    # proxies = {
+    #     'https': f"http://{proxy_host}",
+    #     'http': f"http://{proxy_host}"
+    # }
     
     editable = await m.reply_text(
         "Send **ID & Password** in this manner otherwise bot will not respond.\n\n"
@@ -350,7 +350,8 @@ async def account_login(bot: Client, m: Message):
         await input1.delete(True)
         
         try:
-            response = s.post(url, headers=headers, json=data, proxies=proxies, timeout=10)
+            # Remove proxy parameter for testing
+            response = s.post(url, headers=headers, json=data, timeout=10)
             if response.status_code == 200:
                 response_data = response.json()
                 token = response_data.get("data", {}).get("token", "No token found")
@@ -365,7 +366,7 @@ async def account_login(bot: Client, m: Message):
         token = raw_text
     
     try:
-        batch_response = s.get(f"https://elearn.crwilladmin.com/api/v5/comp/my-batch?&token={token}", proxies=proxies, timeout=10)
+        batch_response = s.get(f"https://elearn.crwilladmin.com/api/v5/comp/my-batch?&token={token}", timeout=10)
         if batch_response.status_code == 200:
             batch_data = batch_response.json()
             topicid = batch_data["data"]["batchData"]
