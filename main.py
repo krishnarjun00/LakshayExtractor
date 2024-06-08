@@ -297,38 +297,17 @@ async def account_login(bot: Client, m: Message):
         print(str(e))
     await m.reply_text("Done")
 """
-@bot.on_message(filters.command(["cw"]))
+@bot.on_message(filters.command(["lakshay"]))
 async def account_login(bot: Client, m: Message):
     url = "https://elearn.crwilladmin.com/api/v5/login-other"
-    base_data = {
-        "deviceType": "android",
-        "password": "Rohit@123",
-        "deviceIMEI": "",
-        "deviceModel": "",
-        "deviceVersion": "R(Android 11.0)",
-        "email": "rohitrkr7652607@gmail.com",
-        "deviceToken": ""
-    }
+    
     headers = {
-        "Host": "elearn.crwilladmin.com",
-        "Token": "",
-        "Usertype": "",
-        "Appver": "84",
-        "Apptype": "android",
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Length": "352",
         "Accept-Encoding": "gzip, deflate",
-        "user-agent": "okhttp/5.0.0-alpha",
-        'Connection': 'Keep-Alive'
+        "User-Agent": "okhttp/5.0.0-alpha",
+        "Connection": "Keep-Alive"
     }
 
-    # Remove proxy configuration for testing
-    # proxy_host = '104.26.3.116'
-    # proxies = {
-    #     'https': f"http://{proxy_host}",
-    #     'http': f"http://{proxy_host}"
-    # }
-    
     editable = await m.reply_text(
         "Send **ID & Password** in this manner otherwise bot will not respond.\n\n"
         "Send like this: **ID*Password** \n"
@@ -340,24 +319,32 @@ async def account_login(bot: Client, m: Message):
     raw_text = input1.text
     
     s = requests.Session()
-    data = base_data.copy()
     
     if "*" in raw_text:
         email, password = raw_text.split("*")
-        data["email"] = email
-        data["password"] = password
+        data = {
+            "deviceType": "android",
+            "password": password,
+            "deviceIMEI": "",
+            "deviceModel": "",
+            "deviceVersion": "R(Android 11.0)",
+            "email": email,
+            "deviceToken": ""
+        }
         
         await input1.delete(True)
         
         try:
-            # Remove proxy parameter for testing
             response = s.post(url, headers=headers, json=data, timeout=10)
+            logging.debug(f"Response status code: {response.status_code}")
+            logging.debug(f"Response text: {response.text}")
+            
             if response.status_code == 200:
                 response_data = response.json()
                 token = response_data.get("data", {}).get("token", "No token found")
                 await m.reply_text(f"Here is your token: ```{token}```")
             else:
-                await m.reply_text(f"Failed to login, status code: {response.status_code}")
+                await m.reply_text(f"Failed to login, status code: {response.status_code}\nResponse: {response.text}")
                 return
         except requests.RequestException as e:
             await m.reply_text(f"Request failed: {str(e)}")
@@ -367,6 +354,9 @@ async def account_login(bot: Client, m: Message):
     
     try:
         batch_response = s.get(f"https://elearn.crwilladmin.com/api/v5/comp/my-batch?&token={token}", timeout=10)
+        logging.debug(f"Batch response status code: {batch_response.status_code}")
+        logging.debug(f"Batch response text: {batch_response.text}")
+        
         if batch_response.status_code == 200:
             batch_data = batch_response.json()
             topicid = batch_data["data"]["batchData"]
