@@ -73,7 +73,7 @@ bot = Client(
 )
 
 print(listen.__file__)
-
+"""
 @bot.on_message(filters.command(["lakshay"]))
 async def account_login(bot: Client, m: Message):
 
@@ -296,7 +296,7 @@ async def account_login(bot: Client, m: Message):
     except Exception as e:
         print(str(e))
     await m.reply_text("Done")
-
+"""
 @Client.on_message(filters.command(["cw"]))
 async def account_login(bot: Client, m: Message):
     url = "https://elearn.crwilladmin.com/api/v5/login-other"
