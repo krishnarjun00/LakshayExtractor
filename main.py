@@ -297,7 +297,7 @@ async def account_login(bot: Client, m: Message):
         print(str(e))
     await m.reply_text("Done")
 """
-@Client.on_message(filters.command(["cw"]))
+@bot.on_message(filters.command(["cw"]))
 async def account_login(bot: Client, m: Message):
     url = "https://elearn.crwilladmin.com/api/v5/login-other"
     base_data = {
@@ -384,8 +384,5 @@ async def account_login(bot: Client, m: Message):
             await m.reply_text(f"Failed to retrieve batches, status code: {batch_response.status_code}")
     except requests.RequestException as e:
         await m.reply_text(f"Request for batches failed: {str(e)}")
-
-# Assuming `app` is your Pyrogram Client instance
-app.run()
 
 bot.run()
