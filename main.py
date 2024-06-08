@@ -295,7 +295,7 @@ async def account_login(bot: Client, m: Message):
             #await m.reply_text("Done")
     except Exception as e:
         print(str(e))
-    await m.reply_text("Done")5
+    await m.reply_text("Done")
 
 @Client.on_message(filters.command(["cw"]))
 async def account_login(bot: Client, m: Message):
